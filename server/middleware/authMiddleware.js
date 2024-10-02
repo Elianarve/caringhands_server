@@ -5,10 +5,6 @@ export const authToken = (req, res, next) =>{
         const authToken = req.headers.authorization?.split(' ')[1];
 
         const dataToken = verifyToken(authToken);
-        
-        const userId = dataToken.userId;
-        
-        req.body.user_id = userId;
 
     next();
     

@@ -3,8 +3,7 @@ import { TK_SECRET } from '../config.js';
 
 export const tokenSign = (user) => {
     const data = {
-        userId: user.id,
-        role: user.role,
+        userId: user.id
     }
     const token = jwt.sign(data, TK_SECRET, { expiresIn: '2h' });
     return token;

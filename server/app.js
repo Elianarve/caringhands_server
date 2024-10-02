@@ -4,14 +4,18 @@ import express from 'express';
 import {DB_PORT} from './config.js';
 import UsersRouter from './routes/UsersRouter.js';
 import authRouter from './routes/authRoter.js';
+import cors from "cors";
 
 const app = express();
+
+app.use(cors());
+app.use(express.json()); 
 
 app.use('/user', UsersRouter );
 app.use('/auth', authRouter);
 
 try {
-    await connection_db.authenticate();
+    connection_db.authenticate();
     console.log('Connection has been established successfully.');
 
     UsersModel.sync();
@@ -21,6 +25,8 @@ try {
     console.error('Unable to connect to the database:', error);
    }
 
-   app.listen(DB_PORT, () => {
+   export const server = app.listen(DB_PORT, () => {
     console.log(`Server up in http://localhost:${DB_PORT}`);
-   })
+   });
+
+export default app;
