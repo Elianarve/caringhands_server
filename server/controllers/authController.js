@@ -16,30 +16,62 @@ export const register = async (req, res) => {
 }
 
 
+// export const login = async (req, res) => {
+//     try {
+//         const { id, password } = req.body;
+//         const user = await UsersModel.findOne({ where: { id } });
+
+//         if (!user) {
+//             return res.status(404).send({ error: 'User not found' });
+//         }
+//         const hashPassword = user?.get('password');
+//         const checkPassword = await bcrypt.compare(password, hashPassword);
+//         const tokenSession = tokenSign(user);
+//         const userName = user?.get('name') 
+//         if (checkPassword) {
+//             const noPassword = { ...user.toJSON(), password: undefined }; 
+//             return res.send({
+//                 message: `Correct user, welcome user ${userName}`,
+//                 data: noPassword,
+//                 token: tokenSession
+//             });
+//         } else {
+//             return res.status(401).send({ error: 'Incorrect password' });
+//         }
+//     } catch (error) {
+//         console.error(error);
+//         return res.status(500).send({ error: 'Internal Server Error' });
+//     }
+// }
+
 export const login = async (req, res) => {
     try {
-        const { id, password } = req.body;
-        const user = await UsersModel.findOne({ where: { id } });
+        const { email, password } = req.body; // Obtener el email en lugar del id
+
+        // Buscar el usuario por el email
+        const user = await UsersModel.findOne({ where: { email } });
 
         if (!user) {
-            return res.status(404).send({ error: 'User not found' });
+            return res.status(404).send({ error: 'Usuario no encontrado' });
         }
-        const hashPassword = user?.get('password');
+
+        const hashPassword = user.get('password');
         const checkPassword = await bcrypt.compare(password, hashPassword);
         const tokenSession = tokenSign(user);
-        const userName = user?.get('name') 
+        const userName = user.get('name');
+
         if (checkPassword) {
             const noPassword = { ...user.toJSON(), password: undefined }; 
             return res.send({
-                message: `Correct user, welcome user ${userName}`,
+                message: `Usuario correcto, bienvenido usuario ${userName}`,
                 data: noPassword,
                 token: tokenSession
             });
         } else {
-            return res.status(401).send({ error: 'Incorrect password' });
+            return res.status(401).send({ error: 'Contraseña incorrecta' });
         }
     } catch (error) {
         console.error(error);
-        return res.status(500).send({ error: 'Internal Server Error' });
+        return res.status(500).send({ error: 'Error interno del servidor' });
     }
 }
