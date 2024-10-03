@@ -1,9 +1,11 @@
 import connection_db from './database/connection_db.js';
 import UsersModel from './models/userModel.js';
+import ProfileModel from './models/profileModel.js';
 import express from 'express';
 import {DB_PORT} from './config.js';
 import UsersRouter from './routes/UsersRouter.js';
 import authRouter from './routes/authRoter.js';
+import profileRouter from './routes/profileRouter.js';
 import cors from "cors";
 
 const app = express();
@@ -13,6 +15,7 @@ app.use(express.json());
 
 app.use('/user', UsersRouter );
 app.use('/auth', authRouter);
+app.use('/profile', profileRouter);
 
 try {
     connection_db.authenticate();
@@ -20,6 +23,9 @@ try {
 
     UsersModel.sync();
     console.log('Model  connected correctly 📋');
+
+    ProfileModel.sync();
+    console.log('Model  connected correctly ❤️❤️❤️❤️');
 
    } catch (error) {
     console.error('Unable to connect to the database:', error);
