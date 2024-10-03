@@ -31,6 +31,10 @@ const ProfileModel = connection_db.define('profile', {
     height: {
         type: DataTypes.FLOAT,
         allowNull: false
+    },
+    steps: {
+        type: DataTypes.INTEGER,
+        allowNull: true
     }
 }, {
     tableName: 'profile',
