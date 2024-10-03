@@ -51,3 +51,18 @@ export const deleteProfile = async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
+export const getProfileByUserId = async (req, res) => {
+    const userId = req.params.userId;
+    try {
+        const profile = await ProfileModel.findOne({ where: { userId: userId } });
+        if (profile) {
+            res.status(200).json(profile);
+        } else {
+            res.status(404).json({ error: 'Profile not found' });
+        }
+    }
+    catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+    };
