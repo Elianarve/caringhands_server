@@ -32,7 +32,7 @@ def query_groq(user_input):
     # Creamos un retriever para Chroma
     retriever = vectorstore.as_retriever(search_type="mmr", search_kwargs={"k": 5, "fetch_k": 20})
 
-    # Mensajes system y human messages
+    # Mensajes system y human
     system_template = """ 
     You are a medical expert. You will be asked a question in Spanish, translate precisely to English. 
     Answer the question based on the following context: {context}.
