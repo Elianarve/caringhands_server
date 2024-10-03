@@ -1,53 +1,30 @@
-import ProfileModel from "../models/profileModel.js";
+import axios from "axios";
 
-export const getProfiles = async (req, res) => {
+const API_URL_PROFILE = "http://localhost:5000/profiles"; // Asegúrate de que esta URL sea correcta
+
+export const getProfileById = async (id) => {
     try {
-        const profiles = await ProfileModel.findAll();
-        res.status(200).json(profiles);
+        const response = await axios.get(`${API_URL_PROFILE}/${id}`);
+        return response.data;
     } catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
+        console.error(error);
     }
 };
 
-export const getProfileById = async (req, res) => {
-    const profileId = req.params.id;
+export const updateProfile = async (id, data) => {
     try {
-        const profile = await ProfileModel.findOne({ where: { id: profileId } });
-        if (profile) {
-            res.status(200).json(profile);
-        } else {
-            res.status(404).json({ error: 'Profile not found' });
-        }
+        const response = await axios.put(`${API_URL_PROFILE}/${id}`, data);
+        return response.data;
     } catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
+        console.error(error);
     }
 };
 
-export const createProfile = async (req, res) => {
+export const createProfile = async (user) => {
     try {
-        const newProfile = await ProfileModel.create(req.body);
-        res.status(201).json(newProfile);
+        const response = await axios.post(API_URL_PROFILE, user);
+        return response.data;
     } catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-};
-
-export const updateProfile = async (req, res) => {
-    const profileId = req.params.id;
-    try {
-        await ProfileModel.update(req.body, { where: { id: profileId } });
-        res.status(200).json({ message: `Profile ${profileId} successfully updated` });
-    } catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-};
-
-export const deleteProfile = async (req, res) => {
-    const profileId = req.params.id;
-    try {
-        await ProfileModel.destroy({ where: { id: profileId } });
-        res.status(200).json({ message: 'Profile deleted successfully' });
-    } catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
+        throw new Error('Error al crear el usuario: ' + error.message);
     }
 };
